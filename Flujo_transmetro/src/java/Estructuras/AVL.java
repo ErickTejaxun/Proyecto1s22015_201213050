@@ -43,7 +43,7 @@ public class AVL {
         Administrador temporal1=(Administrador)nodo.data;
         Administrador temporal2=(Administrador)data;
         
-        if(comparar_cadenas(temporal1.correo,temporal2.correo))
+        if(!comparar_cadenas(temporal1.correo,temporal2.correo))
         {
             if(nodo.ptr_izquierdo==null)
             {
@@ -85,37 +85,12 @@ public class AVL {
     
     public boolean comparar_cadenas(String cadena_raiz, String cadena_nueva)
     {
-        boolean resultado=false;
-        
-        char[] cad1=cadena_raiz.toCharArray();
-        char[] cad2=cadena_nueva.toCharArray();
-        int long1=cad1.length;
-        int long2=cad2.length;
-        
-        if(long1<=long2)
+        boolean resultado=true;  
+        if(cadena_raiz.compareTo(cadena_nueva)>0)
         {
-            for(int x=0;x<long1;x++)
-            {
-                int n1=cad1[x];
-                int n2=cad2[x];
-                System.out.println(n1 +"--- "+n2);
-                if(cad1[x]<cad2[x])
-                {
-                    return true;
-                }
-            }
+            resultado=false;
         }
-        else
-        {
-            for(int x=0;x<long2;x++)
-            {
-                if(cad1[x]<cad2[x])
-                {
-                    return true;
-                }
-            }
-        }
-        System.out.println("resultado=false");
+        System.out.println("resultado------"+resultado);
         return resultado; 
     }
     
@@ -124,17 +99,12 @@ public class AVL {
         String nombre_archivo="ArbolAVL";
         FileWriter fichero = new FileWriter(this.PathActual()+"\\"+nombre_archivo+".dot");
         PrintWriter pw = new PrintWriter(fichero);
-        pw.println( "digraph Administradores{"
-        + "node [dir=both,shape=polygon, fontcolor=\"Black\", height=0.5, color=\"Grey\"]"
-        + "edge [color=\"blue\", color=\"blue:red\"]"
-        + "rankdir=BT"
-        + "");
-        
-        ImprimirHoja(this.raiz, fichero);
-        
+        pw.println( "digraph Administradores{"                
+        + "node [shape = record,height=.1];");        
+        ImprimirHoja(this.raiz, fichero);        
         pw.println("}"); 
         fichero.close();
-        
+        //Crear el archivo jpg para mostrar.
         String  cmd = "dot "+PathActual()+"\\"+nombre_archivo+".dot "+"-Tpng "+"-o "+PathActual()+"\\"+nombre_archivo+".png"; //Crear imagen.
         Runtime.getRuntime().exec(cmd);
     }
@@ -144,28 +114,33 @@ public class AVL {
         PrintWriter pw = new PrintWriter(fichero);
         if(nodo==raiz)
         {
-                pw.println("\"correo:"+temporal.correo+"\nContrasena:"+temporal.contrasena+"\"");
+                
                 if(nodo.ptr_izquierdo!=null)
                 {
+                    pw.println("\"correo:"+temporal.correo+"\nContrasena:"+temporal.contrasena+"\"");
                     Administrador temporali=(Administrador)nodo.ptr_izquierdo.data;
                     pw.println("->\"correo:"+temporali.correo+"\nContrasena:"+temporali.contrasena+"\"");
                 }
                 if(nodo.ptr_derecho!=null)
                 {
-                    Administrador temporali=(Administrador)nodo.ptr_derecho.data;
-                    pw.println("->\"correo:"+temporali.correo+"\nContrasena:"+temporali.contrasena+"\"");
+                    pw.println("\"correo:"+temporal.correo+"\nContrasena:"+temporal.contrasena+"\"");
+                    Administrador temporald=(Administrador)nodo.ptr_derecho.data;
+                    pw.println("->\"correo:"+temporald.correo+"\nContrasena:"+temporald.contrasena+"\"");
                 }
         }
         else
-        {
-             pw.println("->\"correo:"+temporal.correo+"\nContrasena:"+temporal.contrasena+"\"");
-                             if(nodo.ptr_izquierdo!=null)
+        {   
+               
+                pw.println("\"correo:"+temporal.correo+"\nContrasena:"+temporal.contrasena+"\"");
+                if(nodo.ptr_izquierdo!=null)
                 {
+                    pw.println("\"correo:"+temporal.correo+"\nContrasena:"+temporal.contrasena+"\"");
                     Administrador temporali=(Administrador)nodo.ptr_izquierdo.data;
                     pw.println("->\"correo:"+temporali.correo+"\nContrasena:"+temporali.contrasena+"\"");
                 }
                 if(nodo.ptr_derecho!=null)
                 {
+                    pw.println("\"correo:"+temporal.correo+"\nContrasena:"+temporal.contrasena+"\"");
                     Administrador temporali=(Administrador)nodo.ptr_derecho.data;
                     pw.println("->\"correo:"+temporali.correo+"\nContrasena:"+temporali.contrasena+"\"");
                 }
