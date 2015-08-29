@@ -36,7 +36,7 @@ public class AVL {
     public void inicializar(Object data)
     {
         this.raiz=new NodoAVL(data);
-        altura=1;
+        //  altura=1;
     }
     public void insertarR(NodoAVL nodo,Object data)
     {
@@ -48,6 +48,10 @@ public class AVL {
             if(nodo.ptr_izquierdo==null)
             {
                 nodo.ptr_izquierdo= new NodoAVL(data);
+                if(nodo.ptr_derecho==null)
+                {
+           //         nodo.fe++;
+                }
             }
             else
             {
@@ -59,6 +63,10 @@ public class AVL {
             if(nodo.ptr_derecho==null)
             {
                 nodo.ptr_derecho=new NodoAVL(data);
+                if(nodo.ptr_izquierdo==null)
+                {
+             //       nodo.fe++;
+                }
             }
             else 
             {
@@ -114,6 +122,7 @@ public class AVL {
         PrintWriter pw = new PrintWriter(fichero);
         if(nodo==raiz)
         {
+           
                 
                 if(nodo.ptr_izquierdo!=null)
                 {
@@ -144,21 +153,19 @@ public class AVL {
                     Administrador temporali=(Administrador)nodo.ptr_derecho.data;
                     pw.println("->\"correo:"+temporali.correo+"\nContrasena:"+temporali.contrasena+"\"");
                 }
-        }
-        
+        }     
        
         if(nodo.ptr_izquierdo!=null)
         {
-//            Administrador temporali=(Administrador)nodo.ptr_izquierdo.data;
-//            pw.println("->\"correo:"+temporali.correo+"\nContrasena:"+temporali.contrasena+"\"");
             ImprimirHoja(nodo.ptr_izquierdo,fichero);
         }
         if(nodo.ptr_derecho!=null)
         {  
-//            Administrador temporald=(Administrador)nodo.ptr_derecho.data;
-//            pw.println("->\"correo:"+temporald.correo+"\nContrasena:"+temporald.contrasena+"\"");
             ImprimirHoja(nodo.ptr_derecho,fichero);
         }
+        
+        System.out.println(temporal.correo+" altura "+Altura(nodo));
+        System.out.println(temporal.correo+" altura "+factorequilibrio(nodo));
         
     }    
     
@@ -170,11 +177,36 @@ public class AVL {
        path=miDir.getCanonicalPath();
      }
      catch(Exception e) {
-       e.printStackTrace();
        }
      return path;
 }
 
-
+    public int Altura(NodoAVL nodo)
+    {   
+        int ld=0;
+        int li=0;        
+        if(nodo.ptr_derecho!=null)
+        {            
+           ld=+Altura(nodo.ptr_derecho)+nodo.ptr_derecho.fe;
+        }
+        if(nodo.ptr_izquierdo!=null)
+        {            
+           li=+Altura(nodo.ptr_izquierdo)+nodo.ptr_izquierdo.fe;
+        }
+        //System.out.println("Factor de Equilibrio "+ld +"-"+ li+"="+(ld-li));
+        if(ld>li)
+        {
+            return ld;
+        }else
+        {
+            return li;
+        }
+        
+    }
+    
+        public int factorequilibrio(NodoAVL nodo)
+    {        
+        return (Altura(nodo.ptr_derecho)-Altura(nodo.ptr_izquierdo));   
+    }
     
 }

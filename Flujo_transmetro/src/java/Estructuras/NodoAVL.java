@@ -13,24 +13,28 @@ public class NodoAVL {
     public Object data;
     public NodoAVL ptr_izquierdo;
     public NodoAVL ptr_derecho;
+    public int fe;
     
     public NodoAVL()
     {
         data=null;
         ptr_izquierdo=null;
-        ptr_derecho=null;   
+        ptr_derecho=null;  
+        fe=1;
     }
     public NodoAVL(Object data)
     {
         this.data=data;
         this.ptr_derecho=null;
         this.ptr_izquierdo=null;
+        fe=1;
     }
     public NodoAVL(Object data,NodoAVL izquierdo,NodoAVL derecho)
     {
         this.data=data;
         this.ptr_derecho=derecho;
         this.ptr_izquierdo=izquierdo;
+        fe=0;
     }
 
 }
