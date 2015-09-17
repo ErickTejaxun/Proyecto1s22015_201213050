@@ -14,6 +14,7 @@ public class NodoAVL {
     public NodoAVL ptr_izquierdo;
     public NodoAVL ptr_derecho;
     public int fe;
+    public int altura;
     
     public NodoAVL()
     {

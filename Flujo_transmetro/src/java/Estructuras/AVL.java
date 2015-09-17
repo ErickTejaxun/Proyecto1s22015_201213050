@@ -119,6 +119,7 @@ public class AVL {
     public void ImprimirHoja(NodoAVL nodo, FileWriter fichero)
     {
         Administrador temporal=(Administrador)nodo.data;
+        //System.out.println(temporal.correo+" altura "+factorequilibrio(nodo));
         PrintWriter pw = new PrintWriter(fichero);
         if(nodo==raiz)
         {
@@ -165,7 +166,7 @@ public class AVL {
         }
         
         System.out.println(temporal.correo+" altura "+Altura(nodo));
-        System.out.println(temporal.correo+" altura "+factorequilibrio(nodo));
+        //System.out.println(temporal.correo+" altura "+factorequilibrio(nodo));
         
     }    
     
@@ -204,9 +205,29 @@ public class AVL {
         
     }
     
-        public int factorequilibrio(NodoAVL nodo)
-    {        
-        return (Altura(nodo.ptr_derecho)-Altura(nodo.ptr_izquierdo));   
+    public int factorequilibrio(NodoAVL nodo)
+    {     
+        if((nodo.ptr_derecho!=null)&&(nodo.ptr_izquierdo!=null))
+        {
+            return (Altura(nodo.ptr_derecho)-Altura(nodo.ptr_izquierdo));               
+        }else
+        {
+            if(nodo.ptr_derecho==null)
+            {
+                return (Altura(nodo.ptr_derecho));   
+            }
+            else if(nodo.ptr_izquierdo==null)
+            {
+                return (Altura(nodo.ptr_izquierdo));   
+            }else 
+            {
+                return 0;
+            }
+          
+        }
+        
     }
-    
+ 
+
 }
+
