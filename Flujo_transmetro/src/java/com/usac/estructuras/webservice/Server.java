@@ -3,18 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package WebService;
+package com.usac.estructuras.webservice;
 
+import Estructuras.*;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+
 
 /**
  *
  * @author Erick
  */
-@WebService(serviceName = "Transmetro")
-public class Transmetro {
+@WebService(serviceName = "Operacioens")
+public class Server {
+    
+    public AVL Arbol_Administradores=new AVL();
 
     /**
      * This is a sample web service operation
@@ -27,9 +31,9 @@ public class Transmetro {
     /**
      * Web service operation
      */
-    @WebMethod(operationName = "Imprimir")
-    public double Imprimir(@WebParam(name = "texto") double texto) {
-        //TODO write your implementation code here:
-        return texto*3.99;
+    @WebMethod(operationName = "Iniciar")
+    public Server Iniciar() {
+        Arbol_Administradores.Insertar(new Administrador("erickteja@gmail.com","guatemala"));
+        return null;
     }
 }

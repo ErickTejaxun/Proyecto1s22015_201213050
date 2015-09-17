@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
   <services>
-    <service name="Transmetro">
-      <implementation-class>WebService.Transmetro</implementation-class>
+    <service name="Server">
+      <implementation-class>com.usac.estructuras.webservice.Server</implementation-class>
     </service>
   </services>
   <clients/>
