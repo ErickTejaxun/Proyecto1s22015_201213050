@@ -20,7 +20,13 @@ public class AVL_ {
     public AVL_()
     {
         this.raiz=new NodoAVL(new Persona());
-       
+    }
+    public AVL_(int p)
+    {
+        Persona tmp=new Persona();
+        tmp.tipo=2;
+        raiz=null;
+        raiz=new NodoAVL(tmp);
     }
         //Ubicacion del proyecto
     public String PathActual()
@@ -49,7 +55,7 @@ public class AVL_ {
             }
         }else if(auxiliar.tipo==2)
         {
-            if(String.valueOf(auxiliar.clave).compareTo(dato)>0)
+            if(auxiliar.clave>Integer.valueOf(dato))
             {
                 resultado=false;
                 return false;
@@ -221,9 +227,9 @@ public class AVL_ {
             
         }
         //Para Choferes----------------------------------
-       if(temporal_subarbol.tipo==2)
+        if(temporal_subarbol.tipo==2)
         {
-            if(comparar_cadenas(nuevo,temporal_subarbol.correo))
+            if(comparar_cadenas(nuevo,String.valueOf(temporal_subarbol.clave)))
             {
                 if(subarbol.ptr_izquierdo==null)
                 {
@@ -257,7 +263,7 @@ public class AVL_ {
                     if((Factor_equilibrio(subarbol.ptr_derecho)-Factor_equilibrio(subarbol.ptr_izquierdo))==2)
                     {
                         //Persona tmp=(Persona)subarbol.ptr_derecho.data;
-                        if(comparar_cadenas(subarbol.ptr_derecho,temporal_nuevo.correo ))
+                        if(comparar_cadenas(subarbol.ptr_derecho,String.valueOf(temporal_nuevo.clave )))
                         {
                             nuevoPadre=rotacionDerecha(subarbol);
                         }
@@ -333,9 +339,9 @@ public class AVL_ {
         }
     
     
-        public void ImprimirAVL() throws IOException
+        public void ImprimirAVL(String nombre) throws IOException
     {
-        String nombre_archivo="ArbolAVL";
+        String nombre_archivo=nombre;
         FileWriter fichero = new FileWriter(this.PathActual()+"\\"+nombre_archivo+".dot");
         PrintWriter pw = new PrintWriter(fichero);
         pw.println( "digraph Administradores{"                
@@ -352,8 +358,10 @@ public class AVL_ {
         Persona temporal=(Persona)nodo.data;
         //System.out.println(temporal.correo+" altura "+factorequilibrio(nodo));
         PrintWriter pw = new PrintWriter(fichero);
-        if(nodo==raiz)
-        {
+        if(temporal.tipo==1)
+        {     
+            if(nodo==raiz)
+            {
            
                 
                 if(nodo.ptr_izquierdo!=null)
@@ -385,7 +393,47 @@ public class AVL_ {
                     Persona temporali=(Persona)nodo.ptr_derecho.data;
                     pw.println("->\"correo:"+temporali.correo+"\nContrasena:"+temporali.contrasena+"\"");
                 }
-        }     
+        }
+            
+        }else if(temporal.tipo==2)
+        {
+                   if(nodo==raiz)
+                {
+           
+                
+                if(nodo.ptr_izquierdo!=null)
+                {
+                    pw.println("\"Nombre:"+temporal.nombre+"\nApellido:"+temporal.apellido+"\nClave:"+temporal.clave+"\"");
+                    Persona temporali=(Persona)nodo.ptr_izquierdo.data;
+                    pw.println("->\"Nombre:"+temporali.nombre+"\nApellido:"+temporali.apellido+"\nClave:"+temporali.clave+"\"");
+                }
+                if(nodo.ptr_derecho!=null)
+                {
+                    pw.println("\"Nombre:"+temporal.nombre+"\nApellido:"+temporal.apellido+"\nClave:"+temporal.clave+"\"");
+                    Persona temporald=(Persona)nodo.ptr_derecho.data;
+                    pw.println("->\"Nombre:"+temporald.nombre+"\nApellido:"+temporald.apellido+"\nClave:"+temporald.clave+"\"");
+                }
+        }
+        else
+        {   
+               
+                pw.println("\"Nombre:"+temporal.nombre+"\nApellido:"+temporal.apellido+"\nClave:"+temporal.clave+"\"");
+                if(nodo.ptr_izquierdo!=null)
+                {
+                    pw.println("\"Nombre:"+temporal.nombre+"\nApellido:"+temporal.apellido+"\nClave:"+temporal.clave+"\"");
+                    Persona temporali=(Persona)nodo.ptr_izquierdo.data;
+                    pw.println("->\"Nombre:"+temporali.nombre+"\nApellido:"+temporali.apellido+"\nClave:"+temporali.clave+"\"");
+                }
+                if(nodo.ptr_derecho!=null)
+                {
+                    pw.println("\"Nombre:"+temporal.nombre+"\nApellido:"+temporal.apellido+"\nClave:"+temporal.clave+"\"");
+                    Persona temporald=(Persona)nodo.ptr_derecho.data;
+                    pw.println("->\"Nombre:"+temporald.nombre+"\nApellido:"+temporald.apellido+"\nClave:"+temporald.clave+"\"");
+                }
+        }
+            
+            
+        }
        
         if(nodo.ptr_izquierdo!=null)
         {
@@ -606,6 +654,7 @@ public class AVL_ {
             this.eliminar(correo);
             this.Insertar(data);
     }
+
 
     
     

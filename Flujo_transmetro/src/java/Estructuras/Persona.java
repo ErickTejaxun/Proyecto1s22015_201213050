@@ -19,7 +19,7 @@ public class Persona {
     
     public Persona()
     {
-        this.nombre="Juan Carlos";
+        this.nombre="Juan Luis";
         this.apellido="Tejaxun Xicon";
         this.clave=1339;
         this.contrasena="guatemala";
