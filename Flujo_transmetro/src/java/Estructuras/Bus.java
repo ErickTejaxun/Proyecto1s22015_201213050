@@ -10,14 +10,14 @@ package Estructuras;
  * @author Erick
  */
 public class Bus {
-    public int numero;
+    public String  numero;
     
     public Bus()
     {
-       this.numero=0;
+       this.numero="XXinicioXX";
     }
     
-    public Bus(int numero)
+    public Bus(String  numero)
     {
         this.numero=numero;
     }

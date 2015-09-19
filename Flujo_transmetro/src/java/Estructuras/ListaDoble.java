@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,6 +32,7 @@ public class ListaDoble {
        if(Vacio())
        {
            this.cola=this.cabeza=nuevo_temporal;
+           cantidad++;
        }
        else
        {
@@ -38,8 +40,37 @@ public class ListaDoble {
           this.cola.ptr_anterior=nuevo_temporal;
           this.cola=nuevo_temporal;
           this.cola.ptr_siguiente=aux;
+          cantidad++; 
        }
-       
+
+   }
+   
+      public void InsertarInicioBus(Object data)
+   {
+       NodoLista nuevo_temporal=new NodoLista(data);
+       if(Vacio())
+       {
+           this.cola=this.cabeza=nuevo_temporal;
+           cantidad++;
+       }
+       else
+       {
+           Bus tmp=(Bus)data;
+           Bus auxiliar=(Bus)BuscarBus(tmp.numero).data;
+           if(!auxiliar.numero.equals("XXinicioXX"))
+           {
+           System.out.println("Repetido---"+tmp.numero);
+           }else
+           {
+          NodoLista aux=this.cola;
+          this.cola.ptr_anterior=nuevo_temporal;
+          this.cola=nuevo_temporal;
+          this.cola.ptr_siguiente=aux;
+          cantidad++; 
+           }
+       }
+       Ordenar();
+            
    }
    
    public void InsertarFinal(Object data)
@@ -48,6 +79,7 @@ public class ListaDoble {
        if(Vacio())
        {
            this.cola=this.cabeza=nuevo_temporal;
+           cantidad++;
        }
        else
        {
@@ -55,9 +87,36 @@ public class ListaDoble {
           this.cabeza.ptr_siguiente=nuevo_temporal;
           this.cabeza=nuevo_temporal;
           this.cabeza.ptr_anterior=aux;
-       }
-       
+          cantidad++;
+       }  
    }
+      public void InsertarFinalBus(Object data)
+   {
+       NodoLista nuevo_temporal=new NodoLista(data);
+       if(Vacio())
+       {
+           this.cola=this.cabeza=nuevo_temporal;
+           cantidad++;
+       }
+       else
+       {
+           Bus tmp=(Bus)data;
+           Bus auxiliar=(Bus)BuscarBus(tmp.numero).data;
+           if(!auxiliar.numero.equals("XXinicioXX"))
+           {
+           System.out.println("Repetido---"+tmp.numero);
+           }else
+           {
+            NodoLista aux=this.cabeza;
+          this.cabeza.ptr_siguiente=nuevo_temporal;
+          this.cabeza=nuevo_temporal;
+          this.cabeza.ptr_anterior=aux;
+          cantidad++;
+           }
+       }
+            
+   }
+   
    
    public boolean Vacio()
    {
@@ -123,33 +182,31 @@ public class ListaDoble {
         return null;
     }
     
-    public NodoLista BuscarBus(int clave)
+    public NodoLista BuscarBus(String clave)
     {
         NodoLista temp=this.cola;
         NodoLista auxiliar=new NodoLista(new Bus());
         while(temp!=null)
         {
             Bus aux=(Bus)temp.data;
-            if(aux.numero==clave)
+            if(aux.numero.equals(clave))
             {           
                 auxiliar=temp;
             }
                 temp=temp.ptr_siguiente;
-           
-
         } 
         return auxiliar;
     }
     
     
-    public void Eliminar(int clave)
+    public void Eliminar(String clave)
     {
         NodoLista temp=this.cola;
         this.Vaciar();
         while(temp!=null)
         {
             Bus aux=(Bus)temp.data;
-            if(aux.numero==clave)
+            if(aux.numero.equals(clave))
             {
                System.out.println(aux.numero);
                temp=temp.ptr_siguiente;
@@ -163,11 +220,12 @@ public class ListaDoble {
     public void Vaciar()
     {
          this.cola=this.cabeza=null;
+         this.cantidad=0;
     }
     
-    public void Imprimir()throws IOException
+    public void Imprimir(String nombre)throws IOException
     {
-        String nombre_archivo="ListaBuses";
+        String nombre_archivo=nombre;
         FileWriter fichero = new FileWriter(this.PathActual()+"\\"+nombre_archivo+".dot");
         PrintWriter pw = new PrintWriter(fichero);
         pw.println( "digraph Buses{"                
@@ -198,9 +256,42 @@ public class ListaDoble {
         Runtime.getRuntime().exec(cmd);
     }
     
-    public void ImprimirEstacion()throws IOException
+        public void ImprimirRuta(String nombre)throws IOException
     {
-        String nombre_archivo="ListaEstaciones";
+        String nombre_archivo=nombre;
+        FileWriter fichero = new FileWriter(this.PathActual()+"\\"+nombre_archivo+".dot");
+        PrintWriter pw = new PrintWriter(fichero);
+        pw.println( "digraph Buses{"                
+        + "node [shape = record,height=.1];");        
+        
+        //Recorrido de la lista
+        
+        NodoLista temp=this.cola;
+        while(temp.ptr_siguiente!=null)
+        {
+            Bus aux=(Bus)temp.data;
+            Bus aux2=(Bus)temp.ptr_siguiente.data;
+            pw.println("\"Bus No."+aux.numero+"\"->"+"\"Bus No."+aux2.numero+"\"");
+            temp=temp.ptr_siguiente;
+        }
+        temp=this.cabeza;
+        while(temp.ptr_anterior!=null)
+        {
+            Bus aux=(Bus)temp.data;
+            Bus aux2=(Bus)temp.ptr_anterior.data;
+            pw.println("\"Bus No."+aux.numero+"\"->"+"\"Bus No."+aux2.numero+"\"");
+            temp=temp.ptr_anterior;
+        }
+        pw.println("}"); 
+        fichero.close();
+        //Crear el archivo jpg para mostrar.
+        String  cmd = "dot "+PathActual()+"\\"+nombre_archivo+".dot "+"-Tpng "+"-o "+PathActual()+"\\"+nombre_archivo+".png"; //Crear imagen.
+        Runtime.getRuntime().exec(cmd);
+    }
+    
+    public void ImprimirEstacion(String nombre)throws IOException
+    {
+        String nombre_archivo=nombre;
         FileWriter fichero = new FileWriter(this.PathActual()+"\\"+nombre_archivo+".dot");
         PrintWriter pw = new PrintWriter(fichero);
         pw.println( "digraph Buses{"                
@@ -252,5 +343,61 @@ public class ListaDoble {
        }
      return path;
     }
+    
+    
+     public boolean comparar_cadenas(String cadena_raiz, String cadena_nueva)
+    {
+        System.out.println(cadena_raiz +"<"+ cadena_nueva+"\n");
+        boolean resultado=true;  
+        if(cadena_raiz.compareTo(cadena_nueva)>0)
+        {
+            resultado=false;
+        }
+        System.out.println("resultado------"+resultado);
+        return resultado; 
+    }
+     
+     public void Ordenar()
+     {
+         String[] auxiliar=new String[cantidad];
+        int cantidad_inicial=cantidad;
+         int contador=0;
+         if(cantidad!=1)
+        {
+            NodoLista temporal=cola;
+           while(temporal!=null)
+           {
+               Bus aux=(Bus)temporal.data;
+               System.out.print(aux.numero+"|");
+               auxiliar[contador]=aux.numero;
+               temporal=temporal.ptr_siguiente;
+               contador=contador+1;
+           }
+            
+           burbuja(auxiliar);
+            
+                   this.Vaciar();
+                   for(int i=0;i<cantidad_inicial;i++)
+                   {
+                       System.out.print(auxiliar[i]+"|");
+                       this.InsertarFinal(new Bus(String.valueOf(auxiliar[i])));
+                   }   
+                   }
+     }
+     
+     public static void burbuja(String [] A){
+         int i, j;
+         String aux;
+         for(i=0;i<A.length-1;i++)
+              for(j=0;j<A.length-i-1;j++)
+                   if(A[j+1].compareTo(A[j])<0){
+                      aux=A[j+1];
+                      A[j+1]=A[j];
+                      A[j]=aux;
+                   }
+}
+    
+    
+    
 }
 

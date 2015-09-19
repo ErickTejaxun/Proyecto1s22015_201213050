@@ -11,6 +11,13 @@ package Estructuras;
  */
 public class Ruta {
     public String nombre;
+    public ListaDoble estaciones;
+    
+    public Ruta(String nombre)
+    {
+       this.nombre=nombre;
+       this.estaciones=new ListaDoble();
+    }
     
     
 }
