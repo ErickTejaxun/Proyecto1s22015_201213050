@@ -34,6 +34,13 @@ public class Server {
     @WebMethod(operationName = "Iniciar")
     public Server Iniciar() {
         Arbol_Administradores.Insertar(new Administrador("erickteja@gmail.com","guatemala"));
+        
         return null;
     }
+    @WebMethod(operationName = "Logear")
+    public Server Logear(@WebParam(name="username")String username,@WebParam(name="password")String password){
+        
+        
+        return null;
+}
 }

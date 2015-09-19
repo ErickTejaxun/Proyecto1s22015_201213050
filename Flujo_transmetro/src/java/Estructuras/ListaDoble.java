@@ -104,6 +104,43 @@ public class ListaDoble {
         }   
     }
     
+    public NodoLista BuscarEstacion(int clave)
+    {
+        NodoLista temp=this.cola;
+        while(temp!=null)
+        {
+            Estacion aux=(Estacion)temp.data;
+            if(aux.id==clave)
+            {          
+               return temp;
+            }else
+            {
+                temp=temp.ptr_siguiente;
+                
+            }
+
+        } 
+        return null;
+    }
+    
+    public NodoLista BuscarBus(int clave)
+    {
+        NodoLista temp=this.cola;
+        NodoLista auxiliar=new NodoLista(new Bus());
+        while(temp!=null)
+        {
+            Bus aux=(Bus)temp.data;
+            if(aux.numero==clave)
+            {           
+                auxiliar=temp;
+            }
+                temp=temp.ptr_siguiente;
+           
+
+        } 
+        return auxiliar;
+    }
+    
     
     public void Eliminar(int clave)
     {

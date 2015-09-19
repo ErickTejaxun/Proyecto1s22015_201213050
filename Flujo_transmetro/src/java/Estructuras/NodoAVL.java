@@ -13,7 +13,7 @@ public class NodoAVL {
     public Object data;
     public NodoAVL ptr_izquierdo;
     public NodoAVL ptr_derecho;
-    public int fe;
+    public int fe;//Factor de equilibrio
     public int altura;
     
     public NodoAVL()
@@ -21,14 +21,14 @@ public class NodoAVL {
         data=null;
         ptr_izquierdo=null;
         ptr_derecho=null;  
-        fe=1;
+        fe=0;
     }
     public NodoAVL(Object data)
     {
         this.data=data;
         this.ptr_derecho=null;
         this.ptr_izquierdo=null;
-        fe=1;
+        this.fe=0;
     }
     public NodoAVL(Object data,NodoAVL izquierdo,NodoAVL derecho)
     {
