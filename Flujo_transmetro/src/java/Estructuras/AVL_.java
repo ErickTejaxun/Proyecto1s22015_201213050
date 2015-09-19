@@ -108,6 +108,7 @@ public class AVL_ {
         {
             return buscar(dato,r.ptr_izquierdo);
         } 
+    
     }
     //Factor de Equilibrio
     public int Factor_equilibrio(NodoAVL r)
@@ -161,7 +162,7 @@ public class AVL_ {
         return temporal;
     }
     //Insertar 
-    public NodoAVL Insertar(NodoAVL nuevo, NodoAVL subarbol)
+    public NodoAVL InsertarNodo(NodoAVL nuevo, NodoAVL subarbol)
     {
         NodoAVL nuevoPadre=subarbol;
         Persona temporal_subarbol=(Persona)subarbol.data;
@@ -174,36 +175,40 @@ public class AVL_ {
                 if(subarbol.ptr_izquierdo==null)
                 {
                     subarbol.ptr_izquierdo=nuevo;
-                }else 
+                }
+                else 
                 {
-                    subarbol.ptr_izquierdo=Insertar(nuevo,subarbol.ptr_izquierdo);
+                    subarbol.ptr_izquierdo=InsertarNodo(nuevo,subarbol.ptr_izquierdo);
                     if((Factor_equilibrio(subarbol.ptr_izquierdo)-Factor_equilibrio(subarbol.ptr_derecho))==2)
                     {
                         Persona tmp=(Persona)subarbol.ptr_izquierdo.data;
-                        if(!comparar_cadenas(nuevo, tmp.correo))
+                        if(comparar_cadenas(nuevo,tmp.correo))
                         {
                             nuevoPadre=rotacionIzquierda(subarbol);
-                        }else
+                        }
+                        else
                         {
                             nuevoPadre=rotacionDobleIzquierda(subarbol);
                         }
                     } 
                 }
-            } else if(!this.comparar_cadenas(nuevo, temporal_subarbol.correo))
+            } else if(comparar_cadenas(subarbol,temporal_nuevo.correo))
             {
                 if(subarbol.ptr_derecho==null)
                 {
                     subarbol.ptr_derecho=nuevo;
-                }else
+                }
+                else
                 {
-                    subarbol.ptr_derecho=Insertar(nuevo,subarbol.ptr_derecho);
-                    if((this.Factor_equilibrio(subarbol.ptr_derecho)-this.Factor_equilibrio(subarbol.ptr_izquierdo))==2)
+                    subarbol.ptr_derecho=InsertarNodo(nuevo,subarbol.ptr_derecho);
+                    if((Factor_equilibrio(subarbol.ptr_derecho)-Factor_equilibrio(subarbol.ptr_izquierdo))==2)
                     {
-                        Persona tmp=(Persona)subarbol.ptr_derecho.data;
-                        if(this.comparar_cadenas(nuevo,tmp.correo ))
+                        //Persona tmp=(Persona)subarbol.ptr_derecho.data;
+                        if(comparar_cadenas(subarbol.ptr_derecho,temporal_nuevo.correo ))
                         {
                             nuevoPadre=rotacionDerecha(subarbol);
-                        }else
+                        }
+                        else
                         {
                             nuevoPadre=rotacionDobleDerecha(subarbol);
                         }
@@ -216,44 +221,47 @@ public class AVL_ {
             
         }
         //Para Choferes----------------------------------
-        if(temporal_subarbol.tipo==2)
+       if(temporal_subarbol.tipo==2)
         {
-            if(comparar_cadenas(nuevo,String.valueOf(temporal_subarbol.clave)))
+            if(comparar_cadenas(nuevo,temporal_subarbol.correo))
             {
                 if(subarbol.ptr_izquierdo==null)
                 {
                     subarbol.ptr_izquierdo=nuevo;
-                }else 
+                }
+                else 
                 {
-                    subarbol.ptr_izquierdo=Insertar(nuevo,subarbol.ptr_izquierdo);
+                    subarbol.ptr_izquierdo=InsertarNodo(nuevo,subarbol.ptr_izquierdo);
                     if((Factor_equilibrio(subarbol.ptr_izquierdo)-Factor_equilibrio(subarbol.ptr_derecho))==2)
                     {
                         Persona tmp=(Persona)subarbol.ptr_izquierdo.data;
-                        if(comparar_cadenas(nuevo, tmp.correo))
-                        {//Aca esta el error
-                            
-                            nuevoPadre=rotacionDerecha(subarbol);
-                        }else
+                        if(comparar_cadenas(nuevo,String.valueOf(tmp.clave)))
                         {
-                            nuevoPadre=rotacionDobleDerecha(subarbol);
+                            nuevoPadre=rotacionIzquierda(subarbol);
+                        }
+                        else
+                        {
+                            nuevoPadre=rotacionDobleIzquierda(subarbol);
                         }
                     } 
                 }
-            } else if(!this.comparar_cadenas(nuevo, String.valueOf(temporal_subarbol.clave)))
+            } else if(comparar_cadenas(subarbol,String.valueOf(temporal_nuevo.clave)))
             {
                 if(subarbol.ptr_derecho==null)
                 {
                     subarbol.ptr_derecho=nuevo;
-                }else
+                }
+                else
                 {
-                    subarbol.ptr_derecho=Insertar(nuevo,subarbol.ptr_derecho);
-                    if((this.Factor_equilibrio(subarbol.ptr_derecho)-this.Factor_equilibrio(subarbol.ptr_izquierdo))==2)
+                    subarbol.ptr_derecho=InsertarNodo(nuevo,subarbol.ptr_derecho);
+                    if((Factor_equilibrio(subarbol.ptr_derecho)-Factor_equilibrio(subarbol.ptr_izquierdo))==2)
                     {
-                        Persona tmp=(Persona)subarbol.ptr_derecho.data;
-                        if(!this.comparar_cadenas(nuevo,tmp.correo ))
+                        //Persona tmp=(Persona)subarbol.ptr_derecho.data;
+                        if(comparar_cadenas(subarbol.ptr_derecho,temporal_nuevo.correo ))
                         {
                             nuevoPadre=rotacionDerecha(subarbol);
-                        }else
+                        }
+                        else
                         {
                             nuevoPadre=rotacionDobleDerecha(subarbol);
                         }
@@ -274,10 +282,55 @@ public class AVL_ {
             subarbol.fe=subarbol.ptr_izquierdo.fe+1;
         }else
         {
-            subarbol.fe=Math.max(this.Factor_equilibrio(subarbol.ptr_derecho), this.Factor_equilibrio(subarbol.ptr_izquierdo))+1;
+            subarbol.fe=Math.max(Factor_equilibrio(subarbol.ptr_derecho), Factor_equilibrio(subarbol.ptr_izquierdo))+1;
         }
         return nuevoPadre;
     }
+    public void Insertar(Object data)
+    {
+        NodoAVL nuevo=new NodoAVL(data);
+        if(raiz==null)
+        {
+            raiz=nuevo;
+        }
+        else
+        {
+            raiz=InsertarNodo(nuevo,raiz);
+        }
+    }
+    
+    public void Inorden(NodoAVL r)
+    {
+        if(r!=null)
+        {
+            Inorden(r.ptr_izquierdo);
+            Persona tmp=(Persona)r.data;
+            System.out.println(tmp.correo +" " +tmp.contrasena);
+            Inorden(r.ptr_derecho);
+        }
+    }
+       public void Preorden(NodoAVL r)
+      {
+        if(r!=null)
+        {
+            
+            Persona tmp=(Persona)r.data;
+            System.out.println(tmp.correo +" " +tmp.contrasena);
+             Inorden(r.ptr_derecho);
+            Inorden(r.ptr_izquierdo);
+        }
+        }
+       
+       public void Postorden(NodoAVL r)
+      {
+        if(r!=null)
+        {
+            Inorden(r.ptr_derecho);
+            Persona tmp=(Persona)r.data;
+            System.out.println(tmp.correo +" " +tmp.contrasena);
+            Inorden(r.ptr_izquierdo);
+        }
+        }
     
     
         public void ImprimirAVL() throws IOException
@@ -346,6 +399,214 @@ public class AVL_ {
         
     }  
     
+    public boolean eliminar(String dato)
+    {
+        NodoAVL auxiliar=raiz;
+        NodoAVL padre=raiz;
+        Persona auxiliar_p=(Persona)auxiliar.data;
+        Persona padre_p=(Persona)padre.data;
+        boolean esHijoIzquierdo=true;
+        //Para administradores
+        if(auxiliar_p.tipo==1)
+                {
+                            while(!Igualar(auxiliar, dato))
+                            {
+                                padre=auxiliar;
+                                if(!comparar_cadenas(auxiliar,dato))
+                                {
+                                    esHijoIzquierdo=true;
+                                    auxiliar=auxiliar.ptr_izquierdo;
+                                }
+                                else
+                                {
+                                    esHijoIzquierdo=false;
+                                    auxiliar=auxiliar.ptr_derecho;
+                                }
+                                if(auxiliar==null)
+                                {
+                                    return false;
+                                }
+                            }//while
+                            if(auxiliar.ptr_izquierdo==null && auxiliar.ptr_derecho==null)
+                            {
+                                if(auxiliar==raiz)
+                                {
+                                    raiz=null;
+                                }
+                                else if(esHijoIzquierdo)
+                                {
+                                    padre.ptr_izquierdo=null;
+                                }
+                                else
+                                {
+                                    padre.ptr_derecho=null;
+                                }
+                            }
+                            else if(auxiliar.ptr_derecho==null)
+                            {
+                                 if(auxiliar==raiz)
+                                {
+                                    raiz=auxiliar.ptr_izquierdo;
+                                }
+                                else if(esHijoIzquierdo)
+                                {
+                                    padre.ptr_izquierdo=auxiliar.ptr_izquierdo;
+                                }
+                                else
+                                {
+                                    padre.ptr_derecho=auxiliar.ptr_izquierdo;
+                                }
+                                
+                            }else if(auxiliar.ptr_izquierdo==null)
+                            {
+                                 if(auxiliar==raiz)
+                                {
+                                    raiz=auxiliar.ptr_derecho;
+                                }
+                                else if(esHijoIzquierdo)
+                                {
+                                    padre.ptr_izquierdo=auxiliar.ptr_derecho;
+                                }
+                                else
+                                {
+                                    padre.ptr_derecho=auxiliar.ptr_izquierdo;
+                                }
+                                
+                            }else
+                            {
+                                NodoAVL nuevo=ObtenerR(auxiliar);
+                                if(auxiliar==raiz)
+                                {
+                                    raiz=nuevo;
+                                }else if(esHijoIzquierdo)
+                                {
+                                    padre.ptr_izquierdo=nuevo;
+                                }else
+                                {
+                                    padre.ptr_derecho=nuevo;
+                                }
+                                nuevo.ptr_izquierdo=auxiliar.ptr_izquierdo;
+                            }
+                            
+                    
+                }
+        //Para Choferes
+                if(auxiliar_p.tipo==2)
+                {
+                            while(!Igualar(auxiliar, dato))
+                            {
+                                padre=auxiliar;
+                                if(!comparar_cadenas(auxiliar,dato))
+                                {
+                                    esHijoIzquierdo=true;
+                                    auxiliar=auxiliar.ptr_izquierdo;
+                                }
+                                else
+                                {
+                                    esHijoIzquierdo=false;
+                                    auxiliar=auxiliar.ptr_derecho;
+                                }
+                                if(auxiliar==null)
+                                {
+                                    return false;
+                                }
+                            }//while
+                            if(auxiliar.ptr_izquierdo==null && auxiliar.ptr_derecho==null)
+                            {
+                                if(auxiliar==raiz)
+                                {
+                                    raiz=null;
+                                }
+                                else if(esHijoIzquierdo)
+                                {
+                                    padre.ptr_izquierdo=null;
+                                }
+                                else
+                                {
+                                    padre.ptr_derecho=null;
+                                }
+                            }
+                            else if(auxiliar.ptr_derecho==null)
+                            {
+                                 if(auxiliar==raiz)
+                                {
+                                    raiz=auxiliar.ptr_izquierdo;
+                                }
+                                else if(esHijoIzquierdo)
+                                {
+                                    padre.ptr_izquierdo=auxiliar.ptr_izquierdo;
+                                }
+                                else
+                                {
+                                    padre.ptr_derecho=auxiliar.ptr_izquierdo;
+                                }
+                                
+                            }else if(auxiliar.ptr_izquierdo==null)
+                            {
+                                 if(auxiliar==raiz)
+                                {
+                                    raiz=auxiliar.ptr_derecho;
+                                }
+                                else if(esHijoIzquierdo)
+                                {
+                                    padre.ptr_izquierdo=auxiliar.ptr_derecho;
+                                }
+                                else
+                                {
+                                    padre.ptr_derecho=auxiliar.ptr_izquierdo;
+                                }
+                                
+                            }else
+                            {
+                                NodoAVL nuevo=ObtenerR(auxiliar);
+                                if(auxiliar==raiz)
+                                {
+                                    raiz=nuevo;
+                                }else if(esHijoIzquierdo)
+                                {
+                                    padre.ptr_izquierdo=nuevo;
+                                }else
+                                {
+                                    padre.ptr_derecho=nuevo;
+                                }
+                                nuevo.ptr_izquierdo=auxiliar.ptr_izquierdo;
+                            }
+                            
+                    
+                }
+        
+        
+                return true;
+    }
+    //Buscar mayor de los menores o menor de los mayores
+    public NodoAVL  ObtenerR(NodoAVL r)
+    {
+        NodoAVL remplazoPadre=r;
+        NodoAVL remplazo=r;
+        NodoAVL auxiliar=r.ptr_derecho;
+        while(auxiliar!=null)
+        {
+            remplazoPadre=remplazo;
+            remplazo=auxiliar;
+            auxiliar=auxiliar.ptr_izquierdo;
+        }
+        if(remplazo!=r.ptr_derecho)
+        {
+            remplazoPadre.ptr_izquierdo=remplazo.ptr_derecho;
+            remplazo.ptr_derecho=r.ptr_derecho;
+        }
+        Persona tmp=(Persona)remplazo.data;
+        System.out.println(tmp.correo);
+        return remplazo;           
+    }
+    
+    public void Actualizar(String correo,Object data)
+    {
+        //Eliminar Administrador
+            this.eliminar(correo);
+            this.Insertar(data);
+    }
+
     
     
     
