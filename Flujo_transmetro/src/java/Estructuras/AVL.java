@@ -173,10 +173,9 @@ public class AVL {
     public String PathActual()
     {
     String path="";
-     File miDir = new File (".");
+     File midireccion = new File (".");
      try {
-       //System.out.println (miDir.getCanonicalPath());
-       path=miDir.getCanonicalPath();
+       path=midireccion.getCanonicalPath();
      }
      catch(Exception e) {
        }

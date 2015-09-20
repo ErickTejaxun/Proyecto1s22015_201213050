@@ -5,11 +5,11 @@
  */
 package Estructuras;
 
+import flujo_transemtro_desktop.Flujo_transemtro_desktop;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,12 +19,62 @@ public class ListaDoble {
    public NodoLista cola;
    public NodoLista cabeza;
    public int cantidad;
+   public int contador_cluster;
    
    public ListaDoble()
    {
        this.cola=this.cabeza=null;
-       this.cantidad=0;
+       this.cantidad=contador_cluster=0;
    }
+   public void InsertarFecha(String fecha,String Bus)
+   {
+         NodoLista temp=this.cola;
+        while(temp!=null)
+        {
+            Asignacion aux=(Asignacion)temp.data;
+            if(aux.bus.numero.equals(Bus))
+            {
+                Asignacion aux2=aux;
+                this.EliminarBusC(aux.bus.numero);
+//                aux2.fechas.InsertarFinal(fecha);
+                temp=temp.ptr_siguiente;
+            }else
+            {
+                temp=temp.ptr_siguiente;
+                
+            }
+
+        }
+   }
+   
+     public void EliminarBusC(String clave)
+    {
+        NodoLista temp=this.cola;
+        this.Vaciar();
+        while(temp!=null)
+        {
+            Asignacion aux=(Asignacion)temp.data;
+            if(aux.bus.numero.equals(clave))
+            {
+               temp=temp.ptr_siguiente;
+            }
+            if(temp!=null)
+            {
+                if(temp.ptr_siguiente!=null)
+                {
+                    Asignacion aux2=(Asignacion)temp.data;
+                    this.IngresarAsignacion(aux2.bus.numero, aux2.fecha);
+                }
+
+            }
+            if(temp!=null)
+            {
+                temp=temp.ptr_siguiente;  
+            }
+                
+        }   
+    }
+ 
    
    public void InsertarInicio(Object data)
    {
@@ -211,9 +261,12 @@ public class ListaDoble {
                System.out.println(aux.numero);
                temp=temp.ptr_siguiente;
             }
-            Bus aux2=(Bus)temp.data;
+            if(temp!=null)
+            {
+                 Bus aux2=(Bus)temp.data;
                 this.InsertarInicio(aux2);
-                temp=temp.ptr_siguiente;  
+                temp=temp.ptr_siguiente; 
+            }
         }   
     }
     
@@ -395,9 +448,191 @@ public class ListaDoble {
                       A[j+1]=A[j];
                       A[j]=aux;
                    }
-}
+        }
+     
+    public void ImprimirFecha( FileWriter fichero)throws IOException
+    {
+      //  String nombre_archivo=nombre;
+      //  FileWriter fichero = new FileWriter(this.PathActual()+"\\"+nombre_archivo+".dot");
+        PrintWriter pw = new PrintWriter(fichero);      
+          pw.println("	subgraph cluster_"+Flujo_transemtro_desktop.contador_cluster+" {\n" +
+"		style=filled;\n" +
+"		color=lightgrey;\n" +
+"		node [style=filled,color=white];");
+        NodoLista temp=this.cola;
+        while(temp!=null)
+        {
+             Fecha aux=(Fecha)temp.data;
+            if(temp.ptr_siguiente!=null)
+            {
+     
+            Fecha aux2=(Fecha)temp.ptr_siguiente.data;
+            pw.println("\"Fecha:"+aux.fecha+"\"->"+"\"Fecha:"+aux2.fecha+"\"");
+            System.out.println("\"Fecha:"+aux.fecha+"\"->"+"\"Fecha:"+aux2.fecha+"\"");
+            }else
+                    
+            {
+                pw.println("\"Fecha:"+aux.fecha+"\"");
+            }
+            temp=temp.ptr_siguiente;
+        }
+        temp=this.cabeza;
+        while(temp!=null)
+        {
+            Fecha aux=(Fecha)temp.data;
+            if(temp.ptr_anterior!=null)
+            {                        
+            Fecha aux2=(Fecha)temp.ptr_anterior.data;
+            pw.println("\"Fecha:"+aux.fecha+"\"->"+"\"Fecha:"+aux2.fecha+"\"");
+           
+            }else
+            {
+                pw.println("\"Fecha:"+aux.fecha+"\"");
+            }
+             temp=temp.ptr_anterior;
+        }
+       pw.println("}"); 
+       Flujo_transemtro_desktop.contador_cluster++;
+//        fichero.close();
+        //Crear el archivo jpg para mostrar.
+//        String  cmd = "dot "+PathActual()+"\\"+nombre_archivo+".dot "+"-Tpng "+"-o "+PathActual()+"\\"+nombre_archivo+".png"; //Crear imagen.
+//        Runtime.getRuntime().exec(cmd);
+    }
     
+        public void ImprimirFecha2(String nombre)throws IOException
+    {
+        String nombre_archivo=nombre;
+        FileWriter fichero = new FileWriter(this.PathActual()+"\\"+nombre_archivo+".dot");
+        PrintWriter pw = new PrintWriter(fichero);
+        pw.println( "digraph Fecha{"                
+        + "node [shape = record,height=.1];");        
+               
+        NodoLista temp=this.cola;
+        while(temp.ptr_siguiente!=null)
+        {
+            Fecha aux=(Fecha)temp.data;
+            Fecha aux2=(Fecha)temp.ptr_siguiente.data;
+            pw.println("\"Fecha:"+aux.fecha+"\"->"+"\"Fecha:"+aux2.fecha+"\"");
+            temp=temp.ptr_siguiente;
+        }
+        temp=this.cabeza;
+        while(temp.ptr_anterior!=null)
+        {
+            Fecha aux=(Fecha)temp.data;
+            Fecha aux2=(Fecha)temp.ptr_anterior.data;
+            pw.println("\"Fecha:"+aux.fecha+"\"->"+"\"Fecha:"+aux2.fecha+"\"");
+            temp=temp.ptr_anterior;
+        }
+        pw.println("}"); 
+        fichero.close();
+        //Crear el archivo jpg para mostrar.
+        String  cmd = "dot "+PathActual()+"\\"+nombre_archivo+".dot "+"-Tpng "+"-o "+PathActual()+"\\"+nombre_archivo+".png"; //Crear imagen.
+        Runtime.getRuntime().exec(cmd);
+    }
+        public void ImprimirAsignaciones(String nombre)throws IOException
+    {
+        String nombre_archivo=nombre;
+        FileWriter fichero = new FileWriter(this.PathActual()+"\\"+nombre_archivo+".dot");
+        PrintWriter pw = new PrintWriter(fichero);
+        pw.println( "digraph Fecha{"                
+        + "node [shape = record,height=.1];");        
+        NodoLista temp=this.cola;
+        
+        while(temp!=null)
+        {
+            if(temp.ptr_siguiente!=null)
+            {
+             Asignacion aux=(Asignacion)temp.data;
+            Asignacion aux2=(Asignacion)temp.ptr_siguiente.data;
+             pw.println("\"Bus:"+aux.bus.numero+"\"->"+"\"Bus:"+aux2.bus.numero+"\"");
+             ListaDoble tmpfechas=aux.fechas;
+             tmpfechas.ImprimirFecha(fichero);
+             Fecha fe=(Fecha)tmpfechas.cabeza.data;
+             pw.println("\"Bus:"+aux.bus.numero+"\"->"+"\"Fecha:"+fe.fecha+"\"");
+            }else
+            {
+             Asignacion aux=(Asignacion)temp.data;
+             ListaDoble tmpfechas=aux.fechas;
+             tmpfechas.ImprimirFecha(fichero);
+             Fecha fe=(Fecha)tmpfechas.cabeza.data;
+             pw.println("\"Bus:"+aux.bus.numero+"\"->"+"\"Fecha:"+fe.fecha+"\"");
+            }
+             
+             
+//            if(aux.bus.numero.equals(aux2.bus.numero))
+//
+//            {                  
+//                   pw.println("\"Fecha:"+aux.fecha+"\"->"+"\"Fecha:"+aux2.fecha+"\"");
+//                 
+//            }
+//            else
+//            {                
+//                pw.println("\"Bus:"+aux.bus.numero+"\"->"+"\"Bus:"+aux2.bus.numero+"\"");
+//            }          
+            temp=temp.ptr_siguiente;
+        }
+        temp=cabeza;
+        while(temp!=null)
+        {
+            if(temp.ptr_anterior!=null)
+            {
+             Asignacion aux=(Asignacion)temp.data;
+            Asignacion aux2=(Asignacion)temp.ptr_anterior.data;
+            pw.println("\"Bus:"+aux.bus.numero+"\"->"+"\"Fecha:"+aux.fecha+"\"");
+            if(aux.bus.numero.equals(aux2.bus.numero))
+            {
+
+            }
+            }
+           
+            temp=temp.ptr_anterior;
+        }
+
+        pw.println("}"); 
+        fichero.close();
+        //Crear el archivo jpg para mostrar.
+        String  cmd = "dot "+PathActual()+"\\"+nombre_archivo+".dot "+"-Tpng "+"-o "+PathActual()+"\\"+nombre_archivo+".png"; //Crear imagen.
+        Runtime.getRuntime().exec(cmd);
+    }
     
+    public void IngresarAsignacion(String bus, String fecha)
+    {
+       
+       NodoLista nuevo_temporal=new NodoLista(new Asignacion(bus,fecha));
+       if(Vacio())
+       {
+           this.cola=this.cabeza=nuevo_temporal;
+           cantidad++;
+       }
+       else
+       {
+          NodoLista aux=this.cola;
+          boolean encontrado=false;
+          while(aux!=null)
+          {
+              Asignacion asignacion_temporal=(Asignacion)aux.data;              
+              if(asignacion_temporal.bus.numero.equals(bus))
+              {
+                  asignacion_temporal.fechas.InsertarFinal(new Fecha(fecha));
+                  ListaDoble nueva=asignacion_temporal.fechas;
+                  this.EliminarBusC(bus);
+                  Asignacion nuevo_asignacion=new Asignacion(bus,nueva);
+                  this.InsertarInicio(nuevo_asignacion);
+                  encontrado=true;
+              
+              }
+              aux=aux.ptr_siguiente;
+              
+          }
+          if(!encontrado)
+          {
+                this.cabeza.ptr_siguiente=nuevo_temporal;
+               this.cabeza=nuevo_temporal;
+               this.cabeza.ptr_anterior=aux;
+               cantidad++;
+           }
+       } 
+    }
     
 }
 
